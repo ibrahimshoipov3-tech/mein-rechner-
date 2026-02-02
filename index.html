@@ -12,7 +12,7 @@
 
     <div id="login-ui" class="min-h-screen flex items-center justify-center p-4">
         <div class="w-full max-w-sm bg-slate-800 p-10 rounded-[3rem] shadow-2xl text-center border border-white/10">
-            <h1 class="text-3xl font-black mb-8 text-cyan-400">MEIN RECHNER</h1>
+            <h1 class="text-3xl font-black mb-8 text-cyan-400">CLOUD CALC</h1>
             <button onclick="login()" class="w-full bg-white text-slate-900 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 active:scale-95 transition-all">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" class="w-6 h-6">
                 Mit Google anmelden
@@ -21,13 +21,22 @@
     </div>
 
     <div id="app-ui" class="hidden min-h-screen flex flex-col p-6">
-        <h2 class="text-xl font-bold text-center mb-4">Willkommen, Ibrahim!</h2>
+        <div class="max-w-md mx-auto w-full bg-slate-800 rounded-[2rem] p-6 shadow-2xl border border-white/5">
+            <input id="display" type="text" readonly class="w-full text-right text-5xl font-light bg-transparent outline-none mb-8" placeholder="0">
+            <div class="grid grid-cols-4 gap-4">
+                <button onclick="append('7')" class="bg-slate-700 p-6 rounded-2xl text-2xl font-bold">7</button>
+                <button onclick="append('8')" class="bg-slate-700 p-6 rounded-2xl text-2xl font-bold">8</button>
+                <button onclick="append('9')" class="bg-slate-700 p-6 rounded-2xl text-2xl font-bold">9</button>
+                <button onclick="append('/')" class="bg-orange-500 p-6 rounded-2xl text-2xl font-bold">/</button>
+                <button onclick="calculate()" class="col-span-4 bg-cyan-500 p-6 rounded-2xl text-2xl font-bold">=</button>
+            </div>
         </div>
+    </div>
 
     <script>
-        // HIER DEINE FIREBASE DATEN EINSETZEN (aus Bild 18410.jpg)
+        // Deine Daten aus Screenshot 18410.jpg
         const firebaseConfig = {
-            apiKey: "DEIN_API_KEY",
+            apiKey: "AIzaSyD-DEIN-KEY-HIER", // <--- HIER DEINEN API-KEY EINTRAGEN!
             authDomain: "meinprorechner.firebaseapp.com",
             projectId: "meinprorechner",
             appId: "1:198711544949:web:37ec4368a4db0ca3d97c3c"
@@ -36,41 +45,17 @@
 
         function login() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithPopup(provider)
-                .then(() => {
-                    document.getElementById('login-ui').classList.add('hidden');
-                    document.getElementById('app-ui').classList.remove('hidden');
-                })
-                .catch((error) => alert("Fehler: " + error.message));
+            firebase.auth().signInWithPopup(provider).then(() => {
+                document.getElementById('login-ui').style.display = 'none';
+                document.getElementById('app-ui').style.display = 'flex';
+            }).catch(err => alert("Fehler: " + err.message));
+        }
+
+        function append(val) { document.getElementById('display').value += val; }
+        function calculate() { 
+            try { document.getElementById('display').value = eval(document.getElementById('display').value); }
+            catch { alert("Fehler!"); }
         }
     </script>
 </body>
 </html>
-<script>
-  // Deine echten Daten aus Bild 18410.jpg
-  const firebaseConfig = {
-    apiKey: "AIzaSyB...", // Hier musst du deinen API-Key aus Firebase kopieren!
-    authDomain: "meinprorechner.firebaseapp.com",
-    projectId: "meinprorechner",
-    storageBucket: "meinprorechner.appspot.com",
-    messagingSenderId: "198711544949",
-    appId: "1:198711544949:web:37ec4368a4db0ca3d97c3c"
-  };
-
-  // Firebase starten
-  firebase.initializeApp(firebaseConfig);
-
-  // Die Login-Funktion
-  function login() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider)
-      .then((result) => {
-        console.log("Login Erfolg!");
-        document.getElementById('login-ui').classList.add('hidden');
-        document.getElementById('app-ui').classList.remove('hidden');
-      })
-      .catch((error) => {
-        alert("Fehler: " + error.message);
-      });
-  }
-</script> 
