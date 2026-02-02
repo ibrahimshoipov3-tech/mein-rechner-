@@ -46,3 +46,31 @@
     </script>
 </body>
 </html>
+<script>
+  // Deine echten Daten aus Bild 18410.jpg
+  const firebaseConfig = {
+    apiKey: "AIzaSyB...", // Hier musst du deinen API-Key aus Firebase kopieren!
+    authDomain: "meinprorechner.firebaseapp.com",
+    projectId: "meinprorechner",
+    storageBucket: "meinprorechner.appspot.com",
+    messagingSenderId: "198711544949",
+    appId: "1:198711544949:web:37ec4368a4db0ca3d97c3c"
+  };
+
+  // Firebase starten
+  firebase.initializeApp(firebaseConfig);
+
+  // Die Login-Funktion
+  function login() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider)
+      .then((result) => {
+        console.log("Login Erfolg!");
+        document.getElementById('login-ui').classList.add('hidden');
+        document.getElementById('app-ui').classList.remove('hidden');
+      })
+      .catch((error) => {
+        alert("Fehler: " + error.message);
+      });
+  }
+</script> 
