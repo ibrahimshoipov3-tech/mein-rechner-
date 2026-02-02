@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ibrahims Rechner</title>
+    <title>Ibrahims Cloud Rechner</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -20,22 +20,35 @@
         </div>
     </div>
 
-    <div id="app-ui" class="hidden min-h-screen flex flex-col p-6">
-        <div class="max-w-md mx-auto w-full bg-slate-800 rounded-[2rem] p-6 shadow-2xl border border-white/5">
-            <input id="display" type="text" readonly class="w-full text-right text-5xl font-light bg-transparent outline-none mb-8" placeholder="0">
-            <div class="grid grid-cols-4 gap-4">
-                <button onclick="append('7')" class="bg-slate-700 p-6 rounded-2xl text-2xl font-bold">7</button>
-                <button onclick="append('8')" class="bg-slate-700 p-6 rounded-2xl text-2xl font-bold">8</button>
-                <button onclick="append('9')" class="bg-slate-700 p-6 rounded-2xl text-2xl font-bold">9</button>
-                <button onclick="append('/')" class="bg-orange-500 p-6 rounded-2xl text-2xl font-bold">/</button>
-                <button onclick="calculate()" class="col-span-4 bg-cyan-500 p-6 rounded-2xl text-2xl font-bold">=</button>
+    <div id="app-ui" class="hidden min-h-screen flex flex-col items-center justify-center p-6">
+        <div class="w-full max-w-xs bg-slate-900 rounded-[2.5rem] p-6 shadow-2xl border border-white/5">
+            <input id="display" type="text" readonly class="w-full text-right text-5xl font-light bg-transparent outline-none mb-8 pr-2" placeholder="0">
+            <div class="grid grid-cols-4 gap-3">
+                <button onclick="clr()" class="bg-slate-700 p-4 rounded-2xl font-bold text-orange-400">C</button>
+                <button onclick="del()" class="bg-slate-700 p-4 rounded-2xl font-bold">⌫</button>
+                <button onclick="append('/')" class="bg-slate-700 p-4 rounded-2xl font-bold text-cyan-400">/</button>
+                <button onclick="append('*')" class="bg-slate-700 p-4 rounded-2xl font-bold text-cyan-400">×</button>
+                
+                <button onclick="append('7')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">7</button>
+                <button onclick="append('8')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">8</button>
+                <button onclick="append('9')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">9</button>
+                <button onclick="append('-')" class="bg-slate-700 p-4 rounded-2xl font-bold text-cyan-400">-</button>
+                
+                <button onclick="append('4')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">4</button>
+                <button onclick="append('5')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">5</button>
+                <button onclick="append('6')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">6</button>
+                <button onclick="append('+')" class="bg-slate-700 p-4 rounded-2xl font-bold text-cyan-400">+</button>
+                
+                <button onclick="append('0')" class="col-span-2 bg-slate-800 p-5 rounded-2xl text-xl font-semibold">0</button>
+                <button onclick="append('.')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">.</button>
+                <button onclick="calculate()" class="bg-cyan-500 p-5 rounded-2xl text-2xl font-bold">=</button>
             </div>
         </div>
     </div>
 
     <script>
         const firebaseConfig = {
-            apiKey: "DEIN_ECHTER_API_KEY", 
+            apiKey: "BD0g40MPksahMd...", // Ich habe hier deinen Key aus dem Bild eingetragen
             authDomain: "meinprorechner.firebaseapp.com",
             projectId: "meinprorechner",
             appId: "1:198711544949:web:37ec4368a4db0ca3d97c3c"
@@ -45,16 +58,19 @@
         function login() {
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider).then(() => {
-                document.getElementById('login-ui').classList.add('hidden');
-                document.getElementById('app-ui').classList.remove('hidden');
+                document.getElementById('login-ui').style.display = 'none';
                 document.getElementById('app-ui').style.display = 'flex';
-            }).catch(err => alert("Fehler: " + err.message));
+                document.getElementById('app-ui').classList.remove('hidden');
+            }).catch(err => alert("Login Fehler: " + err.message));
         }
 
-        function append(val) { document.getElementById('display').value += val; }
-        function calculate() { 
-            try { document.getElementById('display').value = eval(document.getElementById('display').value); }
-            catch { alert("Rechnung falsch!"); }
+        const disp = document.getElementById('display');
+        function append(v) { disp.value += v; }
+        function clr() { disp.value = ''; }
+        function del() { disp.value = disp.value.slice(0, -1); }
+        function calculate() {
+            try { disp.value = eval(disp.value); }
+            catch { disp.value = 'Fehler'; setTimeout(clr, 1000); }
         }
     </script>
 </body>
