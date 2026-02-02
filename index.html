@@ -13,7 +13,6 @@
     <div id="login-ui" class="min-h-screen flex items-center justify-center p-4">
         <div class="w-full max-w-sm bg-slate-800 p-10 rounded-[3rem] shadow-2xl text-center border border-white/10">
             <h1 class="text-3xl font-black mb-8 text-cyan-400">CLOUD CALC</h1>
-            <p class="text-slate-400 mb-8">Melde dich an, um den Rechner zu nutzen</p>
             <button onclick="login()" class="w-full bg-white text-slate-900 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" class="w-6 h-6">
                 Mit Google anmelden
@@ -44,34 +43,39 @@
                 <button onclick="append('.')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">.</button>
                 <button onclick="calculate()" class="bg-cyan-500 p-5 rounded-2xl text-2xl font-bold">=</button>
             </div>
-            <p id="user-info" class="text-center text-xs text-slate-500 mt-6"></p>
+            
+            <div class="mt-8 text-center">
+                <button onclick="logout()" class="text-xs text-slate-500 underline hover:text-orange-400 transition">
+                    Abmelden
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Deine korrekten Firebase Daten
         const firebaseConfig = {
           apiKey: "AIzaSyDHXz3weNUivbLKxxSFfOEG7I5YABm6DUI",
           authDomain: "meinprorechner.firebaseapp.com",
           projectId: "meinprorechner",
           storageBucket: "meinprorechner.firebasestorage.app",
           messagingSenderId: "198711544949",
-          appId: "1:198711544949:web:37ec4368a4db0ca3d97c3c",
-          measurementId: "G-2XFFG8V7JL"
+          appId: "1:198711544949:web:37ec4368a4db0ca3d97c3c"
         };
         
         firebase.initializeApp(firebaseConfig);
 
         function login() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithPopup(provider).then((result) => {
-                const user = result.user;
+            firebase.auth().signInWithPopup(provider).then(() => {
                 document.getElementById('login-ui').style.display = 'none';
                 document.getElementById('app-ui').classList.remove('hidden');
                 document.getElementById('app-ui').style.display = 'flex';
-                document.getElementById('user-info').innerText = "Eingeloggt als: " + user.displayName;
-            }).catch(err => {
-                alert("Fehler beim Login: " + err.message);
+            }).catch(err => alert("Fehler: " + err.message));
+        }
+
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                location.reload();
             });
         }
 
