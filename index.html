@@ -34,9 +34,8 @@
     </div>
 
     <script>
-        // Deine Daten aus Screenshot 18410.jpg
         const firebaseConfig = {
-            apiKey: "AIzaSyD-DEIN-KEY-HIER", // <--- HIER DEINEN API-KEY EINTRAGEN!
+            apiKey: "DEIN_ECHTER_API_KEY", 
             authDomain: "meinprorechner.firebaseapp.com",
             projectId: "meinprorechner",
             appId: "1:198711544949:web:37ec4368a4db0ca3d97c3c"
@@ -46,7 +45,8 @@
         function login() {
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider).then(() => {
-                document.getElementById('login-ui').style.display = 'none';
+                document.getElementById('login-ui').classList.add('hidden');
+                document.getElementById('app-ui').classList.remove('hidden');
                 document.getElementById('app-ui').style.display = 'flex';
             }).catch(err => alert("Fehler: " + err.message));
         }
@@ -54,7 +54,7 @@
         function append(val) { document.getElementById('display').value += val; }
         function calculate() { 
             try { document.getElementById('display').value = eval(document.getElementById('display').value); }
-            catch { alert("Fehler!"); }
+            catch { alert("Rechnung falsch!"); }
         }
     </script>
 </body>
