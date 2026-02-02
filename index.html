@@ -2,19 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud Calc</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Test</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 </head>
-<body class="bg-slate-900 text-white">
-    <div id="login-ui" class="min-h-screen flex items-center justify-center">
-        <button onclick="login()" class="bg-white text-black px-8 py-4 rounded-xl font-bold">Google Login</button>
-    </div>
-    <div id="app-ui" class="hidden min-h-screen flex items-center justify-center">
-        <h1 class="text-4xl">Rechner bereit!</h1>
-    </div>
+<body style="background-color: #0f172a; color: white; text-align: center; padding-top: 50px;">
+    <h1>Ibrahims Rechner Test</h1>
+    <button onclick="login()" style="padding: 20px; font-size: 20px;">Google Login Drücken</button>
+
     <script>
         const firebaseConfig = {
             apiKey: "BDOg40MPksaMdx5rh8C19FOHgs_e1P1xlHWUImUj8EVlVc-CuFDxCE5kwQiapavKuX6_WYkzUdAbv2ZxGJxtbQY",
@@ -23,12 +18,12 @@
             appId: "1:198711544949:web:37ec4368a4db0ca3d97c3c"
         };
         firebase.initializeApp(firebaseConfig);
+
         function login() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithPopup(provider).then(() => {
-                document.getElementById('login-ui').style.display = 'none';
-                document.getElementById('app-ui').classList.remove('hidden');
-            }).catch(err => alert(err.message));
+            firebase.auth().signInWithPopup(provider)
+                .then(() => { alert("Erfolg! Du bist eingeloggt."); })
+                .catch((error) => { alert("Fehler: " + error.message); });
         }
     </script>
 </body>
