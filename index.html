@@ -2,85 +2,47 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cloud Calc Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ibrahims Rechner</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 </head>
-<body class="bg-[#0f172a] text-white min-h-screen flex items-center justify-center p-4">
+<body class="bg-[#0f172a] text-white">
 
-    <div id="login-ui" class="w-full max-w-sm bg-slate-800 p-10 rounded-[3rem] shadow-2xl text-center border border-white/10">
-        <h1 class="text-3xl font-black mb-8 text-cyan-400">CLOUD CALC</h1>
-        <button onclick="login()" class="w-full bg-white text-slate-900 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 active:scale-95 transition-all">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="20">
-            Google Login
-        </button>
-    </div>
-
-    <div id="app-ui" class="hidden w-full max-w-md bg-slate-900 p-6 rounded-[3rem] shadow-2xl border border-slate-800">
-        <div class="flex justify-between items-center mb-6 px-2">
-            <img id="u-pic" src="" class="w-10 h-10 rounded-full border-2 border-cyan-500">
-            <span id="u-name" class="text-xs font-bold text-slate-400 uppercase tracking-widest"></span>
-            <button onclick="location.reload()" class="text-[10px] text-red-400">LOGOUT</button>
-        </div>
-        <input type="text" id="display" readonly class="w-full text-right text-6xl font-light bg-transparent outline-none mb-8" placeholder="0">
-        <div class="grid grid-cols-4 gap-4">
-            <button onclick="clr()" class="bg-slate-800 text-orange-400 p-5 rounded-3xl font-bold">AC</button>
-            <button onclick="del()" class="bg-slate-800 p-5 rounded-3xl">⌫</button> 
-            <button onclick="add('%')" class="bg-slate-800 p-5 rounded-3xl">%</button>
-            <button onclick="add('/')" class="bg-cyan-600 p-5 rounded-3xl text-2xl font-bold">/</button>
-            <button onclick="add('7')" class="bg-slate-700/40 p-5 rounded-3xl text-2xl">7</button>
-            <button onclick="add('8')" class="bg-slate-700/40 p-5 rounded-3xl text-2xl">8</button>
-            <button onclick="add('9')" class="bg-slate-700/40 p-5 rounded-3xl text-2xl">9</button>
-            <button onclick="add('*')" class="bg-cyan-600 p-5 rounded-3xl text-2xl">×</button>
-            <button onclick="add('4')" class="bg-slate-700/40 p-5 rounded-3xl text-2xl">4</button>
-            <button onclick="add('5')" class="bg-slate-700/40 p-5 rounded-3xl text-2xl">5</button>
-            <button onclick="add('6')" class="bg-slate-700/40 p-5 rounded-3xl text-2xl">6</button>
-            <button onclick="add('-')" class="bg-cyan-600 p-5 rounded-3xl text-2xl">-</button>
-            <button onclick="add('1')" class="bg-slate-700/40 p-5 rounded-3xl text-2xl">1</button>
-            <button onclick="add('2')" class="bg-slate-700/40 p-5 rounded-3xl text-2xl">2</button>
-            <button onclick="add('3')" class="bg-slate-700/40 p-5 rounded-3xl text-2xl">3</button>
-            <button onclick="add('+')" class="bg-cyan-600 p-5 rounded-3xl text-2xl">+</button>
-            <button onclick="add('0')" class="col-span-2 bg-slate-700/40 p-5 rounded-3xl text-2xl text-left pl-8">0</button>
-            <button onclick="add('.')" class="bg-slate-700/40 p-5 rounded-3xl text-2xl">.</button>
-            <button onclick="solve()" class="bg-emerald-500 p-5 rounded-3xl text-3xl font-bold">=</button>
+    <div id="login-ui" class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-sm bg-slate-800 p-10 rounded-[3rem] shadow-2xl text-center border border-white/10">
+            <h1 class="text-3xl font-black mb-8 text-cyan-400">MEIN RECHNER</h1>
+            <button onclick="login()" class="w-full bg-white text-slate-900 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 active:scale-95 transition-all">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" class="w-6 h-6">
+                Mit Google anmelden
+            </button>
         </div>
     </div>
+
+    <div id="app-ui" class="hidden min-h-screen flex flex-col p-6">
+        <h2 class="text-xl font-bold text-center mb-4">Willkommen, Ibrahim!</h2>
+        </div>
 
     <script>
+        // HIER DEINE FIREBASE DATEN EINSETZEN (aus Bild 18410.jpg)
         const firebaseConfig = {
-            apiKey: "AIzaSyDHXz3weNUivbLKxxSFfOBmS_V_U7U0yGk",
+            apiKey: "DEIN_API_KEY",
             authDomain: "meinprorechner.firebaseapp.com",
             projectId: "meinprorechner",
-            storageBucket: "meinprorechner.firebasestorage.app",
-            messagingSenderId: "198711544949",
-            appId: "1:198711544949:web:37ec43640236a281878d65",
-            measurementId: "G-2XFFG8V7JL"
+            appId: "1:198711544949:web:37ec4368a4db0ca3d97c3c"
         };
-
         firebase.initializeApp(firebaseConfig);
-        const disp = document.getElementById('display');
 
-        async function login() {
+        function login() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            try {
-                const res = await firebase.auth().signInWithPopup(provider);
-                document.getElementById('login-ui').classList.add('hidden');
-                document.getElementById('app-ui').classList.remove('hidden');
-                document.getElementById('u-name').innerText = res.user.displayName;
-                document.getElementById('u-pic').src = res.user.photoURL;
-            } catch (e) { alert("Login Error: " + e.message); }
+            firebase.auth().signInWithPopup(provider)
+                .then(() => {
+                    document.getElementById('login-ui').classList.add('hidden');
+                    document.getElementById('app-ui').classList.remove('hidden');
+                })
+                .catch((error) => alert("Fehler: " + error.message));
         }
-
-        function add(v) { if(disp.value.length < 12) disp.value += v; }
-        function clr() { disp.value = ""; }
-        function del() { disp.value = disp.value.slice(0, -1); }
-        function solve() { try { disp.value = eval(disp.value); } catch { disp.value = "Error"; } }
     </script>
 </body>
 </html>
-
-
-
-
