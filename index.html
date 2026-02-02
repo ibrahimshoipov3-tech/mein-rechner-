@@ -2,28 +2,86 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ibrahims Cloud Rechner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 </head>
-<body style="background-color: #0f172a; color: white; text-align: center; padding-top: 50px;">
-    <h1>Ibrahims Rechner Test</h1>
-    <button onclick="login()" style="padding: 20px; font-size: 20px;">Google Login Drücken</button>
+<body class="bg-[#0f172a] text-white font-sans">
+
+    <div id="login-ui" class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-sm bg-slate-800 p-10 rounded-[3rem] shadow-2xl text-center border border-white/10">
+            <h1 class="text-3xl font-black mb-8 text-cyan-400">CLOUD CALC</h1>
+            <p class="text-slate-400 mb-8">Melde dich an, um den Rechner zu nutzen</p>
+            <button onclick="login()" class="w-full bg-white text-slate-900 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" class="w-6 h-6">
+                Mit Google anmelden
+            </button>
+        </div>
+    </div>
+
+    <div id="app-ui" class="hidden min-h-screen flex flex-col items-center justify-center p-6">
+        <div class="w-full max-w-xs bg-slate-900 rounded-[2.5rem] p-6 shadow-2xl border border-white/5">
+            <input id="display" type="text" readonly class="w-full text-right text-5xl font-light bg-transparent outline-none mb-8 pr-2" placeholder="0">
+            <div class="grid grid-cols-4 gap-3">
+                <button onclick="clr()" class="bg-slate-700 p-4 rounded-2xl font-bold text-orange-400">C</button>
+                <button onclick="del()" class="bg-slate-700 p-4 rounded-2xl font-bold">⌫</button>
+                <button onclick="append('/')" class="bg-slate-700 p-4 rounded-2xl font-bold text-cyan-400">/</button>
+                <button onclick="append('*')" class="bg-slate-700 p-4 rounded-2xl font-bold text-cyan-400">×</button>
+                
+                <button onclick="append('7')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">7</button>
+                <button onclick="append('8')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">8</button>
+                <button onclick="append('9')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">9</button>
+                <button onclick="append('-')" class="bg-slate-700 p-4 rounded-2xl font-bold text-cyan-400">-</button>
+                
+                <button onclick="append('4')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">4</button>
+                <button onclick="append('5')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">5</button>
+                <button onclick="append('6')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">6</button>
+                <button onclick="append('+')" class="bg-slate-700 p-4 rounded-2xl font-bold text-cyan-400">+</button>
+                
+                <button onclick="append('0')" class="col-span-2 bg-slate-800 p-5 rounded-2xl text-xl font-semibold">0</button>
+                <button onclick="append('.')" class="bg-slate-800 p-5 rounded-2xl text-xl font-semibold">.</button>
+                <button onclick="calculate()" class="bg-cyan-500 p-5 rounded-2xl text-2xl font-bold">=</button>
+            </div>
+            <p id="user-info" class="text-center text-xs text-slate-500 mt-6"></p>
+        </div>
+    </div>
 
     <script>
+        // Deine korrekten Firebase Daten
         const firebaseConfig = {
-            apiKey: "BDOg40MPksaMdx5rh8C19FOHgs_e1P1xlHWUImUj8EVlVc-CuFDxCE5kwQiapavKuX6_WYkzUdAbv2ZxGJxtbQY",
-            authDomain: "meinprorechner.firebaseapp.com",
-            projectId: "meinprorechner",
-            appId: "1:198711544949:web:37ec4368a4db0ca3d97c3c"
+          apiKey: "AIzaSyDHXz3weNUivbLKxxSFfOEG7I5YABm6DUI",
+          authDomain: "meinprorechner.firebaseapp.com",
+          projectId: "meinprorechner",
+          storageBucket: "meinprorechner.firebasestorage.app",
+          messagingSenderId: "198711544949",
+          appId: "1:198711544949:web:37ec4368a4db0ca3d97c3c",
+          measurementId: "G-2XFFG8V7JL"
         };
+        
         firebase.initializeApp(firebaseConfig);
 
         function login() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithPopup(provider)
-                .then(() => { alert("Erfolg! Du bist eingeloggt."); })
-                .catch((error) => { alert("Fehler: " + error.message); });
+            firebase.auth().signInWithPopup(provider).then((result) => {
+                const user = result.user;
+                document.getElementById('login-ui').style.display = 'none';
+                document.getElementById('app-ui').classList.remove('hidden');
+                document.getElementById('app-ui').style.display = 'flex';
+                document.getElementById('user-info').innerText = "Eingeloggt als: " + user.displayName;
+            }).catch(err => {
+                alert("Fehler beim Login: " + err.message);
+            });
+        }
+
+        const disp = document.getElementById('display');
+        function append(v) { disp.value += v; }
+        function clr() { disp.value = ''; }
+        function del() { disp.value = disp.value.slice(0, -1); }
+        function calculate() {
+            try { disp.value = eval(disp.value); }
+            catch { disp.value = 'Fehler'; setTimeout(clr, 1000); }
         }
     </script>
 </body>
